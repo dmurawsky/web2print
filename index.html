@@ -14,7 +14,7 @@
 		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
 	</div>
 	<div id="logo" flow-init flow-name="uploader.flow" flow-files-added="processFile($files)">
-		<img src="{{ctrl.imageString}}"
+		<img src="{{ctrl.logo.upload}}">
 		<button flow-btn type="file">Upload Images</button>
 	</div>
 	<div id="settings"><button class="btn btn-circle btn-success btn-lg" ng-click="ctrl.add()"><i class="glyphicon glyphicon-plus"></i></button></div>
@@ -26,9 +26,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-flow/2.6.1/ng-flow-standalone.min.js"></script>
 	<script type="text/javascript">
 		var app = angular.module('app', ['firebase', 'flow'])
-		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", "$window", function($rootScope, Auth, Ref, $firebaseArray, $window){
+		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", "$firebaseObject", "$anchorScroll", function($rootScope, Auth, Ref, $firebaseArray, $firebaseObject, $anchorScroll){
 			var ctrl = this;
 			this.inputs = $firebaseArray(Ref.child('/2015_Fall/beneva/inputs'));
+			this.logo = $firebaseObject(Ref.child('/2015_Fall/beneva/logo'));
 			this.login = function(){
 				Ref.authWithPassword(ctrl.user, function(error, authData) {
 					if(error){console.log(error);}else{console.log(authData);ctrl.user='';}
@@ -39,15 +40,12 @@
 			}
 			this.imageString = '';
 			this.processFile = function(file){
-				//angular.forEach(files, function(flowFile, i){
 				var fileReader = new FileReader();
 				fileReader.onload = function (event) {
 					var uri = event.target.result;
-					ctrl.imageString = uri;
-					Ref.child('/2015_Fall/beneva/logo').set(uri);
+					Ref.child('/2015_Fall/beneva/logo').set(upload:uri);
 				};
 				fileReader.readAsDataURL(flowFile.file);
-				//});
 			};
 			this.move = function(direction, index, inputs){
 				var move = 0;
@@ -61,10 +59,7 @@
 				}else if(index == -1){
 					move = inputs.length-1;
 				}
-				var top = angular.element(document.querySelector("#input"+move)).prop('offsetTop');
-				var left = angular.element(document.querySelector("#input"+move)).prop('offsetTop');
-				$window.pageYOffset(top - 15);
-				$window.pageXOffset(left - 15);
+				$anchorScroll('input'+move);
 			};
 		    Auth.$onAuth(function(authData) {
 		    	if(authData){

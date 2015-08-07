@@ -16,6 +16,15 @@ body{
 	height: 1743px;
 	opacity: 0.2;
 }
+#logo{
+	position:absolute;
+	left: 3300px;
+	top:200px;
+}
+#logo img{
+	width:647px;
+	height: 400px;
+}
 .input{
 	position: absolute;
 }

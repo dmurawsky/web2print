@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Beneva Web2Print</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body ng-app="app" ng-controller="AppCtrl as ctrl" class="ng-scope">
+	<div id="overlay"></div>
+	<div class="input" ng-repeat="(key, input) in ctrl.inputs" id="input{{$index}}">
+		<input type="text" ng-model="input.text">
+		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.prev($index)">Previous</button>
+	</div>
+	<div id="settings"><button class="btn btn-circle btn-success btn-lg"><i class="glyphicon glyphicon-plus"></i></button></div>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+	<script type="text/javascript">
+		var app = angular.module('app', ['firebase'])
+		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", function($rootScope, Auth, Ref, $firebaseArray){
+			var ctrl = this;
+			this.inputs = $firebaseArray(Ref.child('/2015_Fall/inputs'));
+			this.login = function(){
+				Ref.authWithPassword(ctrl.user, function(error, authData) {
+					if(error){console.log(error);}else{console.log(authData);ctrl.user='';}
+				});
+			};
+			this.prev = function(){
+				
+			};
+		    Auth.$onAuth(function(authData) {
+		    	if(authData){
+					$rootScope.authData = authData;
+		    	}else{
+		    		$rootScope.authData = false;
+		    	}
+		    });
+		}])
+		.factory("Auth", ["$firebaseAuth", "Ref", function($firebaseAuth, Ref){return $firebaseAuth(Ref);}])
+		.factory("Ref", [function (){var ref = new Firebase("https://webprint.firebaseio.com/web2print");return ref;}]);
+		$(function(){$('[data-toggle="popover"]').popover()});
+	</script>
+</body>
+</html>

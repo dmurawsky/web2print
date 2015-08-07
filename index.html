@@ -45,7 +45,7 @@
 		<input type="text" ng-model="input.text" ng-change="ctrl.inputs.$save(input)" ng-class="{bold:input.bold}" style="font-size:{{input.size}}px;" size="{{input.length}}">
 	</div>
 	<div id="logo" ng-show="uid">
-		<a id="input{{ctrl.inputs.length}}">
+		<a id="input{{ctrl.inputs.length}}"></a>
 		<div id="buttons{{ctrl.inputs.length}}" class="hidden">
 			<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('prev',$index, ctrl.inputs)">Prev</button>
 			<button class="btn btn-primary next" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
@@ -127,8 +127,9 @@
 						console.log(error);
 						ctrl.error = error;
 					}else{
-						$('#createAccount').modal('hide');
+						//$('#createAccount').modal('hide');
 						Ref.child('2015_Fall/'+userData.uid+'/info').set({company:info.company,phone:info.phone,email:cred.email});
+						ctrl.login(cred);
 						console.log("Successfully created user account with uid:", userData.uid);
 					}
 				});

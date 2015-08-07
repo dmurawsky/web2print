@@ -29,19 +29,14 @@ body,html{
 	font-weight:bold;
 }
 #logo{
-	position:absolute;
 	left: 2678px;
 	top:86px;
-}
-#logo img{
-	width:593px;
-	height: 330px;
 }
 .input input{
 	background: transparent;
 	border:none;
 }
-.input{
+.input, #logo{
 	position: absolute;
 }
 #settings{

@@ -14,11 +14,9 @@
 				<div class="col-md-4">
 					<div class="panel panel-default"><div class="panel-body">
 						<center><h1>Login</h1></center>
-						<form ng-submit="ctrl.login(login)">
-							<div class="form-group"><input class="form-control" ng-model="login.email" type="email" placeholder="Email" required></div>
-							<div class="form-group"><input class="form-control" ng-model="login.password" type="password" placeholder="Password" required></div>
-							<div class="form-group"><button class="btn btn-primary pull-right">Login</button></div>
-						</form>
+						<div class="form-group"><input class="form-control" ng-model="login.email" type="email" placeholder="Email" required></div>
+						<div class="form-group"><input class="form-control" ng-model="login.password" type="password" placeholder="Password" required></div>
+						<div class="form-group"><button class="btn btn-primary pull-right" ng-click="ctrl.login(login)">Login</button></div>
 						<div class="form-group"><button class="btn btn-default pull-right" style="margin-right:20px;" data-toggle="modal" data-target="#createAccount">Create Account</button></div>
 					</div></div>
 				</div>
@@ -28,7 +26,7 @@
 	<div id="bg" ng-if="uid"></div>
 	<div id="overlay" ng-if="uid"></div>
 	<div ng-show="uid" class="input" ng-repeat="(key, input) in ctrl.inputs" id="input{{$index}}" style="left:{{input.left}}px;top:{{input.top}}px;">
-		<div id="buttons{{$index}}" class="hidden">
+		<div id="buttons{{$index}}">
 			<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('prev',$index, ctrl.inputs)">Prev</button>
 			<button class="btn btn-primary next" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('up', ctrl.inputs.$keyAt(key))"><i class="fa fa-chevron-up"></i></button>
@@ -39,29 +37,24 @@
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('smaller', ctrl.inputs.$keyAt(key))"><sub><i class="fa fa-font"></i></sub></button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('shorter', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-left"></i></button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('longer', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-right"></i></button>
-			<button ng-class="{active:input.bold}" class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('bold', ctrl.inputs.$keyAt(key))"><strong>Bold</strong></button>
-			<button ng-class="{active:input.normal}" class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('normal', ctrl.inputs.$keyAt(key))">Normal</button><br>
+			<button ng-class="{active:input.bold}" class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('bold', ctrl.inputs.$keyAt(key))"><strong>Bold</strong></button><br>
 		</div>
 		<input type="text" ng-model="input.text" ng-change="ctrl.inputs.$save(input)" ng-class="{bold:input.bold}" style="font-size:{{input.size}}px;" size="{{input.length}}">
 	</div>
 	<div id="logo" ng-show="uid">
 		<a id="input{{ctrl.inputs.length}}"></a>
-		<div id="buttons{{ctrl.inputs.length}}" class="hidden">
+		<div id="buttons{{ctrl.inputs.length}}">
 			<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('prev',$index, ctrl.inputs)">Prev</button>
 			<button class="btn btn-primary next" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('up', ctrl.inputs.$keyAt(key))"><i class="fa fa-chevron-up"></i></button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('down', ctrl.inputs.$keyAt(key))"><i class="fa fa-chevron-down"></i></button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('left', ctrl.inputs.$keyAt(key))"><i class="fa fa-chevron-left"></i></button>
 			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('right', ctrl.inputs.$keyAt(key))"><i class="fa fa-chevron-right"></i></button>
-			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('bigger', ctrl.inputs.$keyAt(key))"><i class="fa fa-font"></i></i></button>
-			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('smaller', ctrl.inputs.$keyAt(key))"><sub><i class="fa fa-font"></i></sub></button>
-			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('shorter', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-left"></i></button>
-			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('longer', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-right"></i></button>
-			<button ng-class="{active:input.bold}" class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('bold', ctrl.inputs.$keyAt(key))"><strong>Bold</strong></button>
-			<button ng-class="{active:input.normal}" class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('normal', ctrl.inputs.$keyAt(key))">Normal</button><br>
+			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('wider', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-right"></i></i></button>
+			<button class="btn btn-default btn-sm" href="javascipt:void(0)" ng-click="ctrl.set('thinner', ctrl.inputs.$keyAt(key))"><i class="fa fa-arrow-left"></i></button><br>
 		</div>
 		<input type="file" accept="image/*" capture="camera" id="file-upload">
-		<img class="pano" id="pano" />
+		<img class="pano" id="pano" width="{{ctrl.logo.width}}" />
 		<div id="uid" class="hidden">{{uid}}</div>
 	</div>
 	<button id="logout" ng-show="uid" ng-click="ctrl.logout()" class="btn btn-default"><i class="fa fa-sign-out"></i></div>
@@ -69,38 +62,36 @@
 	<div class="modal fade" id="createAccount" tabindex="-1" role="dialog" aria-labelledby="createAccountLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<form ng-submit="ctrl.create(cred, info)">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="createAccountLabel">Create Account</h4>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="createAccountLabel">Create Account</h4>
+				</div>
+				<div class="modal-body">
+					<div ng-show="ctrl.error" class="alert alert-warning alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						{{ctrl.error}}
 					</div>
-					<div class="modal-body">
-						<div ng-show="ctrl.error" class="alert alert-warning alert-dismissible" role="alert">
-  							<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							{{ctrl.error}}
-						</div>
-						<div class="form-group">
-							<label>Email*</label>
-							<input class="form-control" ng-model="cred.email" type="email" required>
-						</div>
-						<div class="form-group">
-							<label>Passowrd*</label>
-							<input class="form-control" ng-model="cred.password" type="password" required>
-						</div>
-						<div class="form-group">
-							<label>Company*</label>
-							<input class="form-control" ng-model="info.company" type="text" required>
-						</div>
-						<div class="form-group">
-							<label>Phone*</label>
-							<input class="form-control" ng-model="info.phone" type="phone" required>
-						</div>
+					<div class="form-group">
+						<label>Email*</label>
+						<input class="form-control" ng-model="cred.email" type="email" required>
 					</div>
-					<div class="modal-footer">
-						<button class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="submit" class="btn btn-primary">Create</button>
+					<div class="form-group">
+						<label>Passowrd*</label>
+						<input class="form-control" ng-model="cred.password" type="password" required>
 					</div>
-				</form>
+					<div class="form-group">
+						<label>Company*</label>
+						<input class="form-control" ng-model="info.company" type="text" required>
+					</div>
+					<div class="form-group">
+						<label>Phone*</label>
+						<input class="form-control" ng-model="info.phone" type="phone" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-primary" ng-click="ctrl.create(cred, info)">Create</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -114,7 +105,6 @@
 		var app = angular.module('app', ['firebase'])
 		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", "$anchorScroll", function($rootScope, Auth, Ref, $firebaseArray, $anchorScroll){
 			var ctrl = this;
-			this.inputs = $firebaseArray(Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs'));
 			this.login = function(login){
 				Ref.authWithPassword(login, function(error, authData) {
 					if(error){console.log(error);}else{console.log(authData);}
@@ -127,7 +117,6 @@
 						console.log(error);
 						ctrl.error = error;
 					}else{
-						//$('#createAccount').modal('hide');
 						Ref.child('2015_Fall/'+userData.uid+'/info').set({company:info.company,phone:info.phone,email:cred.email});
 						ctrl.login(cred);
 						console.log("Successfully created user account with uid:", userData.uid);
@@ -136,7 +125,7 @@
 			};
 			this.add = function(){
 				Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/').push(
-					{"left":"118","length":"8","size":"120","text":"type","top":"72","weight":"normal"}
+					{"left":"118","length":"8","size":"120","text":"type","top":"72","bold":false}
 				);
 			};
 			this.set = function(action, key){
@@ -198,6 +187,22 @@
 						});
 				        break;
 				    case "shorter":
+						Ref.child('/2015_Fall/'+$rootScope.uid+'/logo/width').once('value',function(snap){
+							var val = snap.val();
+							var length = Number(val);
+							var shorter = length - 1;
+							snap.ref().set(shorter);
+						});
+				        break;
+				    case "wider":
+						Ref.child('/2015_Fall/'+$rootScope.uid+'/logo/width').once('value',function(snap){
+							var val = snap.val();
+							var length = Number(val);
+							var shorter = length - 1;
+							snap.ref().set(shorter);
+						});
+				        break;
+				    case "thinner":
 						Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/'+key+'/length').once('value',function(snap){
 							var val = snap.val();
 							var length = Number(val);
@@ -207,11 +212,6 @@
 				        break;
 				    case "bold":
 						Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/'+key+'/bold').set(true);
-						Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/'+key+'/normal').set(false);
-				        break;
-				    case "normal":
-						Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/'+key+'/bold').set(false);
-						Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs/'+key+'/normal').set(true);
 				        break;
 				}			
 			}
@@ -240,14 +240,19 @@
 		    Auth.$onAuth(function(authData) {
 		    	if(authData){
 					$rootScope.uid = authData.uid;
-					$rootScope.cleanuid = authData.uid.replace(':','');
-					Ref.child('https://webprint.firebaseio.com/2015_Fall/'+authData.uid+'/logo').once('value', function(snap) {
+					Ref.child('/2015_Fall/'+authData.uid+'/logo/img').once('value', function(snap) {
 						var payload = snap.val();
 						if (payload != null) {
 							document.getElementById("pano").src = payload;
 						} else {
 							console.log("Not found");
 						}
+					});
+					ctrl.inputs = $firebaseArray(Ref.child('/2015_Fall/'+$rootScope.uid+'/inputs'));
+					ctrl.inputs.$loaded(function(x) {
+						console.log(x);
+					}, function(error) {
+						console.error("Error:", error);
 					});
 		    	}else{
 		    		$rootScope.uid = false;
@@ -270,8 +275,9 @@
 			reader.readAsDataURL(f);
 			function closurefun(e, file){
 				var uid = $("#uid").html();
+				console.log(uid);
 		    	var filePayload = e.target.result;
-				var ref = new Firebase('https://webprint.firebaseio.com/2015_Fall/'+uid+'/logo/');
+				var ref = new Firebase('https://webprint.firebaseio.com/2015_Fall/'+uid+'/logo/img');
 				ref.set(filePayload);
 				document.getElementById("pano").src = e.target.result;
 			}

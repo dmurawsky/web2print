@@ -1,10 +1,19 @@
-body{
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);
+body,html{
+	padding:0;
+	margin:0;
+	font-family: "Droid Serif", sans-serif;
+	min-height:100%;
+	height:auto;
+}
+#login{
+	margin-top:50px;
+}
+#bg{
 	background: url(bg.jpg) no-repeat;
 	background-size: 3375px 1875px;
 	width: 3375px;
 	height: 1875px;
-	padding:0;
-	margin:0;
 }
 #overlay{
 	background:url(overlay.png) no-repeat;
@@ -16,14 +25,21 @@ body{
 	height: 1743px;
 	opacity: 0.2;
 }
+.bold{
+	font-weight:bold;
+}
 #logo{
 	position:absolute;
-	left: 2800px;
-	top:200px;
+	left: 2678px;
+	top:86px;
 }
 #logo img{
-	width:647px;
-	height: 400px;
+	width:593px;
+	height: 330px;
+}
+.input input{
+	background: transparent;
+	border:none;
 }
 .input{
 	position: absolute;
@@ -32,6 +48,11 @@ body{
 	position: fixed;
 	right:15px;
 	bottom:15px;
+}
+#logout{
+	position: fixed;
+	right:15px;
+	top:15px;
 }
 .btn-circle {
 	width: 30px;

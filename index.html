@@ -8,28 +8,63 @@
 </head>
 <body ng-app="app" ng-controller="AppCtrl as ctrl" class="ng-scope">
 	<div id="overlay"></div>
-	<div class="input" ng-repeat="(key, input) in ctrl.inputs" id="input{{$index}}">
-		<input type="text" ng-model="input.text">
-		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.prev($index)">Previous</button>
+	<div class="input" ng-repeat="(key, input) in ctrl.inputs" id="input{{$index}}" style="left:{{input.left}}px;top:{{input.top}}px;">
+		<input type="text" ng-model="input.text" style="font-size:{{input.size}}px;">
+		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('prev',$index, ctrl.inputs)">Prev</button>
+		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
 	</div>
-	<div id="settings"><button class="btn btn-circle btn-success btn-lg"><i class="glyphicon glyphicon-plus"></i></button></div>
+	<div id="logo" flow-init flow-name="uploader.flow" flow-files-added="processFile($files)">
+		<img src="{{ctrl.imageString}}"
+		<button flow-btn type="file">Upload Images</button>
+	</div>
+	<div id="settings"><button class="btn btn-circle btn-success btn-lg" ng-click="ctrl.add()"><i class="glyphicon glyphicon-plus"></i></button></div>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
 	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-flow/2.6.1/ng-flow-standalone.min.js"></script>
 	<script type="text/javascript">
-		var app = angular.module('app', ['firebase'])
-		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", function($rootScope, Auth, Ref, $firebaseArray){
+		var app = angular.module('app', ['firebase', 'flow'])
+		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", "$window", function($rootScope, Auth, Ref, $firebaseArray, $window){
 			var ctrl = this;
-			this.inputs = $firebaseArray(Ref.child('/2015_Fall/inputs'));
+			this.inputs = $firebaseArray(Ref.child('/2015_Fall/beneva/inputs'));
 			this.login = function(){
 				Ref.authWithPassword(ctrl.user, function(error, authData) {
 					if(error){console.log(error);}else{console.log(authData);ctrl.user='';}
 				});
 			};
-			this.prev = function(){
-				
+			this.add = function(){}
+				Ref.child('/2015_Fall/beneva/inputs').push()
+			}
+			this.imageString = '';
+			this.processFile = function(file){
+				//angular.forEach(files, function(flowFile, i){
+				var fileReader = new FileReader();
+				fileReader.onload = function (event) {
+					var uri = event.target.result;
+					ctrl.imageString = uri;
+					Ref.child('/2015_Fall/beneva/logo').set(uri);
+				};
+				fileReader.readAsDataURL(flowFile.file);
+				//});
+			};
+			this.move = function(direction, index, inputs){
+				var move = 0;
+				if(direction == 'next'){
+					move = index + 1;
+				}else if(direction == 'prev'){
+					move = index - 1;
+				}
+				if(index == inputs.length){
+					move = 0;
+				}else if(index == -1){
+					move = inputs.length-1;
+				}
+				var top = angular.element(document.querySelector("#input"+move)).prop('offsetTop');
+				var left = angular.element(document.querySelector("#input"+move)).prop('offsetTop');
+				$window.pageYOffset(top - 15);
+				$window.pageXOffset(left - 15);
 			};
 		    Auth.$onAuth(function(authData) {
 		    	if(authData){
@@ -40,7 +75,7 @@
 		    });
 		}])
 		.factory("Auth", ["$firebaseAuth", "Ref", function($firebaseAuth, Ref){return $firebaseAuth(Ref);}])
-		.factory("Ref", [function (){var ref = new Firebase("https://webprint.firebaseio.com/web2print");return ref;}]);
+		.factory("Ref", [function (){var ref = new Firebase("https://webprint.firebaseio.com/");return ref;}]);
 		$(function(){$('[data-toggle="popover"]').popover()});
 	</script>
 </body>

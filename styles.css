@@ -16,7 +16,7 @@ body{
 	height: 1743px;
 	opacity: 0.2;
 }
-input{
+.input{
 	position: absolute;
 }
 #settings{

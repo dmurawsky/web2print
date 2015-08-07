@@ -6,16 +6,28 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-<body ng-app="app" ng-controller="AppCtrl as ctrl" class="ng-scope">
+<body ng-app="app" ng-controller="AppCtrl as ctrl" class="ng-scope" flow-init
+      flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+      flow-files-submitted="$flow.upload()">
 	<div id="overlay"></div>
 	<div class="input" ng-repeat="(key, input) in ctrl.inputs" id="input{{$index}}" style="left:{{input.left}}px;top:{{input.top}}px;">
 		<input type="text" ng-model="input.text" style="font-size:{{input.size}}px;">
 		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('prev',$index, ctrl.inputs)">Prev</button>
 		<button class="btn btn-primary prev" href="javascipt:void(0)" ng-click="ctrl.move('next',$index, ctrl.inputs)">Next</button>
 	</div>
-	<div id="logo" flow-init flow-name="uploader.flow" flow-files-added="processFile($files)">
-		<img src="{{ctrl.logo.upload}}">
-		<button flow-btn type="file">Upload Images</button>
+	<div>
+		<div class="thumbnail" ng-hide="$flow.files.length">
+			<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+logo" />
+		</div>
+		<div class="thumbnail" ng-show="$flow.files.length">
+			<img flow-img="$flow.files[0]" />
+		</div>
+		<div>
+			<a href="#" class="btn" ng-hide="$flow.files.length" flow-btn flow-attrs="{accept:'image/*'}">Select image</a>
+			<a href="#" class="btn" ng-show="$flow.files.length" flow-btn flow-attrs="{accept:'image/*'}">Change</a>
+			<a href="#" class="btn btn-danger" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a>
+		</div>
+		<p>Only PNG,GIF,JPG files allowed.</p>
 	</div>
 	<div id="settings"><button class="btn btn-circle btn-success btn-lg" ng-click="ctrl.add()"><i class="glyphicon glyphicon-plus"></i></button></div>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -26,26 +38,46 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-flow/2.6.1/ng-flow-standalone.min.js"></script>
 	<script type="text/javascript">
 		var app = angular.module('app', ['firebase', 'flow'])
+		.config(['flowFactoryProvider', function (flowFactoryProvider) {
+			flowFactoryProvider.defaults = {
+				target: '/uploads',
+				permanentErrors: [404, 500, 501],
+				maxChunkRetries: 1,
+				chunkRetryInterval: 5000,
+				simultaneousUploads: 4,
+				singleFile: true
+			};
+			flowFactoryProvider.on('catchAll', function (event) {
+				console.log('catchAll', arguments);
+			});
+			// Can be used with different implementations of Flow.js
+			// flowFactoryProvider.factory = fustyFlowFactory;
+		}])
 		.controller("AppCtrl", ["$rootScope", "Auth", "Ref", "$firebaseArray", "$firebaseObject", "$anchorScroll", function($rootScope, Auth, Ref, $firebaseArray, $firebaseObject, $anchorScroll){
 			var ctrl = this;
 			this.inputs = $firebaseArray(Ref.child('/2015_Fall/beneva/inputs'));
-			this.logo = $firebaseObject(Ref.child('/2015_Fall/beneva/logo'));
+			Ref.child('2015_fall/beneva/logo').once("value",function(snap){
+				ctrl.logo = snap.val();
+			});
 			this.login = function(){
 				Ref.authWithPassword(ctrl.user, function(error, authData) {
 					if(error){console.log(error);}else{console.log(authData);ctrl.user='';}
 				});
 			};
-			this.add = function(){}
+			this.add = function(){
 				Ref.child('/2015_Fall/beneva/inputs').push()
-			}
-			this.imageString = '';
-			this.processFile = function(file){
-				var fileReader = new FileReader();
-				fileReader.onload = function (event) {
-					var uri = event.target.result;
-					Ref.child('/2015_Fall/beneva/logo').set(upload:uri);
-				};
-				fileReader.readAsDataURL(flowFile.file);
+			};
+			this.processFile = function(files){
+	   			angular.forEach(files, function(flowFile, i){
+					var fileReader = new FileReader();
+					fileReader.onload = function (event) {
+						console.log(event);
+						var uri = event.target.result;
+						console.log(url);
+						Ref.child('/2015_Fall/beneva/logo').set(uri);
+					};
+					fileReader.readAsDataURL(flowFile.file);
+			    });
 			};
 			this.move = function(direction, index, inputs){
 				var move = 0;

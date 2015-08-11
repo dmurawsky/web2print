@@ -1,12 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
 body,html{
 	padding:0;
 	margin:0;
+	font-family: "Droid Serif", sans-serif;
 	min-height:100%;
-	font-family: "Droid Serif", serif;
 	height:auto;
-	font-family:serif!important;
+}
+#login{
+	margin-top:50px;
 }
 #bg{
 	background: url(bg.jpg) no-repeat;
@@ -24,49 +25,29 @@ body,html{
 	height: 1743px;
 	opacity: 0.2;
 }
-footer{
-	position: fixed;
-	left:0px;
-	right:0px;
-	bottom:0px;
-	height:100px;
-	background: #353535;
+.bold{
+	font-weight:bold;
 }
-input.opensans{
-	font-family: "Open Sans", sans-serif;
+#logo{
+	left: 2678px;
+	top:86px;
+}
+.input input{
+	background: transparent;
+	border:none;
+}
+.input, #logo{
+	position: absolute;
 }
 #settings{
 	position: fixed;
 	right:15px;
 	bottom:15px;
 }
-#logo{
-	left: 2678px;
-	top:60px;
-}
-.input input,.input textarea{
-	background: transparent;
-	border:solid 1px #353535;
-}
-.input{
-	position: absolute;
-}
-.input span{
-	opacity: 0;
-}
-.input:hover > a{
-	display: inline;
-}
-.input a{
-	display: none;
-	position:absolute;
-	top:0px;
-}
-.input a.prev{
-	left:-25px;
-}
-.input a.next{
-	right:-24px;
+#logout{
+	position: fixed;
+	right:15px;
+	top:15px;
 }
 .btn-circle {
 	width: 30px;
